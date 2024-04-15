@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 import datetime
 import random
+from book.models import Book
 
 
 def hello_view(request):
@@ -29,6 +30,27 @@ def main_view(request):
 
     if request.method == 'GET':
         return render(request, 'main.html', {'mock_data': mock_data})
+
+
+def book_list_view(request):
+    if request.method == 'GET':
+        books = Book.objects.all()
+
+        context = {'books': books}
+
+        return render(request, 'book/book_list.html', context)
+
+
+def book_detail_view(request, book_id):
+    if request.method == 'GET':
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            return HttpResponse('Post not found', status=404)
+
+        context = {'book': book}
+
+        return render(request, 'book/book_detail.html', context)
 
 
 

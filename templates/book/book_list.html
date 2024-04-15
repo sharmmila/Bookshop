@@ -1,0 +1,13 @@
+<h1>
+    Books:
+</h1>
+
+{% for book in books %}
+    <div>
+        <img src="{{ book.image }}">
+        <h2>{{ book.title }} - {{ book.rate }}</h2>
+
+
+        <a href="{{ book.id }}">Read more</a>
+    </div>
+{% endfor %}
