@@ -4,8 +4,9 @@
 
 {% for book in books %}
     <div>
-        <img src="{{ book.image }}">
+       <img src="/media/{{ book.image }}" width="300">
         <h2>{{ book.title }} - {{ book.rate }}</h2>
+
 
 
         <a href="{{ book.id }}">Read more</a>

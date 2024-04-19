@@ -12,3 +12,23 @@
 
     <a href="/books/">Back to main page</a>
 </div>
+
+<h2>
+    Tags:
+</h2>
+
+{% for tag in book.tags.all %}
+    <p>
+        {{ tag.title }}
+    </p>
+{% endfor %}
+
+<h2>
+    Reviews:
+</h2>
+
+{% for review in book.reviews.all %}
+    <p>
+        {{ comment.text }}
+    </p>
+{% endfor %}
