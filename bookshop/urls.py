@@ -19,7 +19,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from book.views import hello_view, fun_view, main_view, book_detail_view, book_list_view
+from book.views import hello_view, fun_view, main_view, book_detail_view, book_list_view, post_create_view, review_create_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,8 @@ urlpatterns = [
     path("hello/", hello_view),
     path('', main_view),
     path("books/", book_list_view),
+    path("books/create/", post_create_view, name='post_create_view'),
     path("books/<int:book_id>/", book_detail_view),
+    path("books/create_review/", review_create_view),
 ]
 static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

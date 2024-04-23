@@ -1,14 +1,28 @@
-<h1>
-    Books:
+{% extends 'components/navbar.html' %}
+
+{% load static %}
+
+{% block content %}
+<h1 style="text-align: center;">
+    Books
 </h1>
 
-{% for book in books %}
-    <div>
-       <img src="/media/{{ book.image }}" width="300">
-        <h2>{{ book.title }} - {{ book.rate }}</h2>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+    {% for book in books %}
+    <div class="card" style="width: 18rem;">
+        {% if post.image %}
+            <img src="/media/{{ book.image }}" class="card-img-top" alt="...">
+        {% else %}
+            <img src="{% static 'default.png' %}" class="card-img-top" alt="...">
+        {% endif %}
+        <div class="card-body">
+        <h5 class="card-title">{{ book.title }}</h5>
+        </div>
 
-
-
-        <a href="{{ book.id }}">Read more</a>
+        <div class="card-body">
+        <a href="/books/{{ book.id }}" class="card-link">Show more..</a>
+        </div>
     </div>
-{% endfor %}
+    {% endfor %}
+</div>
+{% endblock %}

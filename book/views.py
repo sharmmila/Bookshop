@@ -1,7 +1,10 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 import datetime
 import random
 from book.models import Book
+
+from book.forms import BookForm, BookForm2
+
 
 
 def hello_view(request):
@@ -52,5 +55,25 @@ def book_detail_view(request, book_id):
 
         return render(request, 'book/book_detail.html', context)
 
+def post_create_view(request):
+    if request.method == 'GET':
+        form = BookForm2()
+        return render(request, 'book/book_post_create.html', {'form': form})
+    elif request.method == 'POST':
+        form = BookForm2(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('book_list_view')
+
+        return render(request, 'book/book_post_create.html', {'form': form})
 
 
+def review_create_view(request):
+    if request.method == 'GET':
+        return render(request, 'book/review_create.html',)
+    elif request.method == 'POST':
+        return redirect('book_detail_view')
+
+    return render(request, 'book/review_create.html', )
