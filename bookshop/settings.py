@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "post.middleware.PerformanceMonitoringMiddleware",
 ]
 
 ROOT_URLCONF = 'bookshop.urls'
@@ -128,6 +129,25 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+LOGGING = {
+     "version": 1,
+     "disable_existing_loggers": False,
+     "handlers": {
+         "file": {
+             "level": "INFO",
+             "class": "logging.FileHandler",
+             "filename": BASE_DIR / "django.log",
+         },
+     },
+     "loggers": {
+         "django": {
+             "handlers": ["file"],
+             "level": "INFO",
+             "propagate": True,
+         },
+     },
+ }
 
 
 # Default primary key field type

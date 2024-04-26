@@ -1,0 +1,21 @@
+{% extends 'components/navbar.html' %}
+
+
+{% block content %}
+
+
+<h1 class="mt-5" style="text-align: center;">
+    Create book_post
+</h1>
+
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" class="btn btn-primary" value="Create post">
+</form>
+
+
+
+{% endblock %}
