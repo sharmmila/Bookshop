@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 import datetime
 import random
 from book.models import Book
+from typing import Any
 from django.views import View
 from django.forms.models import BaseModelForm
 from django.views.generic import ListView, DetailView, CreateView
@@ -99,7 +100,13 @@ def post_create_view(request):
         form = BookForm2(request.POST, request.FILES)
 
         if form.is_valid():
-            form.save()
+            # form.save()
+            Book.objects.create_post(
+                title=form.cleaned_data['title'],
+                text=form.cleaned_data['text'],
+                image=form.cleaned_data['image'],
+                # author=request.user
+            )
 
             return redirect('book_list_view')
 
@@ -111,6 +118,18 @@ class PostCreateView(CreateView):
     template_name = 'book/book_post_create.html'
     success_url = '/books/'
 
+
+def get(self, request, *args, **kwargs):
+    if not request.user.is_authenticated:
+        return redirect('login_view')
+    form = self.get_form()
+    return self.render_to_response({'form': form})
+
+
+def form_valid(self, form: BaseModelForm) -> Any:
+    form.instance.author = self.request.user
+    self.object = form.save()
+    return redirect(self.get_success_url())
 
 def review_create_view(request):
     if request.method == 'GET':

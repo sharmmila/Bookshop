@@ -15,7 +15,19 @@ class Category(models.Model):
         return f"{self.title}"
 
 
+class PostManager(models.Manager):
+    def create_post(self, title, text, image):
+        post = self.create(title=title.upper(), text=text, image=image)
+        return post
+
+
 class Book(models.Model):
+    author = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        related_name='books',
+        null=True,
+    )
     image = models.ImageField(upload_to='book_photos/', null=True, blank=True)
     title = models.CharField(max_length=255)
     text = models.TextField(null=True, blank=True)
@@ -40,9 +52,16 @@ class Reviews(models.Model):
         on_delete=models.CASCADE,
         related_name='reviews',
     )
+    author = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        related_name='reviews',
+        null=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = PostManager()
     def __str__(self):
         return f"{self.text}"
 

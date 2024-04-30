@@ -19,6 +19,8 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
+from user.views import LoginView, RegisterView, LogoutView, ProfileView
+
 # from book.views import hello_view, fun_view, main_view, book_detail_view, book_list_view, post_create_view, review_create_view
 from book.views import HelloView, FunView, MainView, BookListView, BookDetailView, PostCreateView, ReviewCreateView
 urlpatterns = [
@@ -30,6 +32,10 @@ urlpatterns = [
     path("books/create/",PostCreateView.as_view(), name="post_create"),
     path("books/<int:book_id>/", BookDetailView.as_view(), name="book_detail"),
     path('create_review/', ReviewCreateView.as_view(), name="create_review"),
+    path("register/", RegisterView.as_view(), name='register_view'),
+    path("login/", LoginView.as_view(), name='login_view'),
+    path("logout/", LogoutView.as_view(), name='logout_view'),
+    path("profile/", ProfileView.as_view(), name='profile_view'),
 
     # path("fun/", fun_view),
     # path("hello/", hello_view),
