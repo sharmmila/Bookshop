@@ -1,6 +1,44 @@
 from django import forms
 
-from book.models import Book
+from book.models import Book, Tag
+
+
+class SearchForm(forms.Form):
+    search = forms.CharField(
+        required=False,
+        max_length=100,
+        min_length=3,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Поиск',
+                'class': 'form-control'
+            }
+        )
+    )
+    tags = forms.ModelMultipleChoiceField(
+        required=False,
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    orderings = (
+        ('title', 'По заголовку'),
+        ('-title', 'По заголовку (обратно)'),
+        ('rate', 'По оценке'),
+        ('-rate', 'По оценке (обратно)'),
+        ('created_at', 'По дате создания'),
+        ('-created_at', 'По дате создания (обратно)')
+    )
+
+    ordering = forms.ChoiceField(
+        required=False,
+        choices=orderings,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control'
+            }
+        )
+    )
 
 
 class BookForm(forms.Form):

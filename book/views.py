@@ -5,9 +5,10 @@ from book.models import Book
 from typing import Any
 from django.views import View
 from django.forms.models import BaseModelForm
+from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView
 
-from book.forms import BookForm, BookForm2
+from book.forms import BookForm, BookForm2, SearchForm
 
 
 
@@ -60,9 +61,39 @@ class MainView(View):
 
 def book_list_view(request):
     if request.method == 'GET':
-        books = Book.objects.all()
+        search = request.GET.get('search')  # None
+        tags = request.GET.getlist('tags')  # [id`1, id`2, id`3]
+        ordering = request.GET.get('ordering')  # 'title'
+        page = int(request.GET.get('page', 1))  # 1
 
-        context = {'books': books}
+        search_form = SearchForm(request.GET)
+        posts = Book.objects.all().select_related('author').prefetch_related('tags').prefetch_related('categories')
+        # SELECT * FROM post_post JOIN auth_user ON post_post.author_id = auth_user.id
+
+        if search:
+            posts = posts.filter(
+                Q(title__icontains=search) | Q(text__icontains=search)
+            )
+        if tags:
+            posts = posts.filter(tags__id__in=tags).distinct()
+
+        if ordering:
+            posts = posts.order_by(ordering)
+
+        limit = 4
+        max_pages = posts.count() / limit
+
+        if round(max_pages) < max_pages:
+            max_pages = round(max_pages) + 1
+        else:
+            max_pages = round(max_pages)
+
+        start = (page - 1) * limit
+        end = page * limit
+
+        posts = posts[start:end]
+
+        context = {'posts': posts, 'name': "Esen", 'search_form': search_form, 'max_pages': range(1, max_pages + 1)}
 
         return render(request, 'book/book_list.html', context)
 
